@@ -10,6 +10,7 @@ Versions:
 - '2.6'
 - '2.7'
 - '3.3'
+- '3.5'
 License: The Python License, version 2.6
 License-Url: http://docs.python.org/3/license.html
 Vendor: python.org
@@ -71,10 +72,10 @@ Version-Overrides:
     - python-2.7
     - python
     - python(version) = 2.7
-  '3.3':
-    Display-Name: Python 3.3
-    License: The Python License, version 3.3
+  '3.5':
+    Display-Name: Python 3.5
+    License: The Python License, version 3.5
     Provides:
-    - python-3.3
+    - python-3.5
     - python
-    - python(version) = 3.3
+    - python(version) = 3.5

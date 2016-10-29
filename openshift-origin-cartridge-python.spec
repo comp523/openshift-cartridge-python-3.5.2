@@ -61,18 +61,21 @@ Python cartridge for OpenShift. (Cartridge Format V2)
 
 %__mkdir -p %{buildroot}%{cartridgedir}/env
 
-%__mkdir -p %{buildroot}%{cartridgedir}/usr/versions/{2.6,2.7,3.3}
+%__mkdir -p %{buildroot}%{cartridgedir}/usr/versions/{2.6,2.7,3.3,3.5}
 %if 0%{?fedora}%{?rhel} <= 6
 %__cp -anv %{buildroot}%{cartridgedir}/usr/versions/2.7-scl/* %{buildroot}%{cartridgedir}/usr/versions/2.7/
 %__cp -anv %{buildroot}%{cartridgedir}/usr/versions/3.3-scl/* %{buildroot}%{cartridgedir}/usr/versions/3.3/
+%__cp -anv %{buildroot}%{cartridgedir}/usr/versions/3.5-scl/* %{buildroot}%{cartridgedir}/usr/versions/3.5/
 %endif
 %__cp -anv %{buildroot}%{cartridgedir}/usr/versions/shared/* %{buildroot}%{cartridgedir}/usr/versions/2.6/
 %__cp -anv %{buildroot}%{cartridgedir}/usr/versions/shared/* %{buildroot}%{cartridgedir}/usr/versions/2.7/
 %__cp -anv %{buildroot}%{cartridgedir}/usr/versions/shared/* %{buildroot}%{cartridgedir}/usr/versions/3.3/
+%__cp -anv %{buildroot}%{cartridgedir}/usr/versions/shared/* %{buildroot}%{cartridgedir}/usr/versions/3.5/
 
 %__rm -rf %{buildroot}%{cartridgedir}/usr/versions/shared
 %__rm -rf %{buildroot}%{cartridgedir}/usr/versions/2.7-scl
 %__rm -rf %{buildroot}%{cartridgedir}/usr/versions/3.3-scl
+%__rm -rf %{buildroot}%{cartridgedir}/usr/versions/3.5-scl
 
 %files
 %dir %{cartridgedir}
@@ -85,6 +88,7 @@ Python cartridge for OpenShift. (Cartridge Format V2)
 %endif
 %attr(0755,-,-) %{cartridgedir}/usr/versions/2.7/bin/*
 %attr(0755,-,-) %{cartridgedir}/usr/versions/3.3/bin/*
+%attr(0755,-,-) %{cartridgedir}/usr/versions/3.5/bin/*
 %{cartridgedir}/env
 %{cartridgedir}/logs
 %{cartridgedir}/metadata

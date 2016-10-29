@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Utility function to create virtual environments
+
+venv_dir=$OPENSHIFT_PYTHON_DIR/virtenv/venv
+
+function relative-virtenv {
+  pushd "$venv_dir" > /dev/null
+
+  vdir=$(cd "${venv_dir}" && pwd)
+  for zf in $(grep -l -r "#\!$vdir/venv/bin/" . ); do
+    sed --follow-symlinks -i "s;#\!$vdir/venv/bin/;#\!/usr/bin/env ;" "$zf"
+  done
+
+  popd > /dev/null
+}
+
+function create-virtenv {
+  if [ ! -d "$venv_dir" ]  ||  ! $(ls "$venv_dir" > /dev/null 2>&1); then
+    pyvenv --system-site-packages --clear $venv_dir
+  fi
+
+  if ! $(ls $venv_dir/bin/pip > /dev/null 2>&1); then
+    install_pip
+  fi
+
+  relative-virtenv
+}
+
+function install_pip() {
+  pushd "$venv_dir" > /dev/null
+
+  # Activate virtual env.
+  source bin/activate
+
+  # Install pip
+  python ${OPENSHIFT_PYTHON_DIR}/usr/versions/3.5/lib/get-pip.py
+
+  popd > /dev/null
+}
+
+function activate-virtenv {
+  source $venv_dir/bin/activate
+}
