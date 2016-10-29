@@ -1,0 +1,5 @@
+#!/var/lib/openshift/57fbd4b21a003e672700003c/python/usr/bin/python3.5
+
+import pydoc
+if __name__ == '__main__':
+    pydoc.cli()

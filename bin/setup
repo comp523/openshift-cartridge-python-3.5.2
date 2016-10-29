@@ -7,11 +7,110 @@ case "$1" in
       version="$2"
 esac
 
+# copied from the embedded cartridge
+pdir=$OPENSHIFT_PYTHON_DIR
+vdir=$OPENSHIFT_PYTHON_VENV_DIR
+tdir=$OPENSHIFT_TMP_DIR
+
+mkdir -p $vdir
+
+function report_status() {
+	if [ $1 -ne 0 ]; then
+		client_error "$2 failed."
+		exit 1
+	else
+		client_result "$2 done."
+	fi
+}
+
+function is_python_installed() {
+	if [ -f $pdir/usr/bin/python3 -o -f $pdir/usr/bin/python ]; then
+		if [[ "$( $pdir/usr/bin/python3 -V 2>&1 )" == "Python $ver" ]]; then
+			return 0
+		elif [[ "$( $pdir/usr/bin/python -V 2>&1 )" == "Python $ver" ]]; then
+			return 0
+		fi
+	fi
+	return 1
+}
+
+function build_python() {
+	client_result "Installing Python $ver"
+
+	# Get the number of processors
+	if [ -f /proc/cpuinfo ]; then
+		cpus=$( grep -c ^processor /proc/cpuinfo )
+	else
+		cpus=1
+	fi
+	
+	curl -L -o $tdir/$ver.tgz https://www.python.org/ftp/python/$ver/Python-$ver.tgz
+	mkdir -p $tdir/python-$ver
+	tar xvzf $tdir/$ver.tgz --strip-component=1 -C $tdir/python-$ver
+	
+	# if a different version exists, remove it first
+	if [ -d $pdir/usr/bin ]; then
+		rm -rf $pdir/usr
+	fi
+
+	cd $tdir/python-$ver
+	./configure --prefix=${pdir}usr/
+	make -j$cpus > /dev/null
+	make install -j$cpus > /dev/null
+
+#	$pdir/usr/bin/python -m ensurepip  > /dev/null
+#	$pdir/usr/bin/pip install virtualenv
+
+	report_status $? "Installation"
+}
+
+function is_virt_installed() {
+	if [ -f $vdir/bin/activate ]; then
+		return 0
+	fi
+	return 1
+}
+
+function create_virt() {
+	if [ -f $pdir/usr/bin/virtualenv ]; then
+		$pdir/usr/bin/virtualenv --clear $vdir
+	else
+		client_error "virtualenv not installed"
+	fi
+}
+
+if ! is_python_installed; then
+	build_python
+#	create_virt
+else
+	client_result "Python $ver already installed."
+fi
+
+#if ! is_virt_installed; then
+#	create_virt
+#else
+#	client_result "Virtual environment already installed."
+#fi
+
+# Clean up temp directory
+rm -rf $tdir/python-$ver
+rm -f $tdir/$ver.tgz
+
+# pip stores cache in .cache an logs in .pip.
+# Create directories, change ownership and SELinux security context
+mkdir -p $OPENSHIFT_HOMEDIR/{.cache,.pip}
+chown $OPENSHIFT_GEAR_UUID.$OPENSHIFT_GEAR_UUID -R $OPENSHIFT_HOMEDIR/.pip $OPENSHIFT_HOMEDIR/.cache
+
+
+# end copy
+
+
+
 mkdir -p ${OPENSHIFT_PYTHON_DIR}etc
 
 # Update environment
-source ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/lib/update-configuration
-update-configuration
+#source ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/lib/update-configuration
+#update-configuration
 
 # Call the version specific setup script
 exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/setup $version
