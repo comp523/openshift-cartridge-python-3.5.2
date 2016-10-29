@@ -25,9 +25,9 @@ function report_status() {
 
 function is_python_installed() {
 	if [ -f $pdir/usr/bin/python3 -o -f $pdir/usr/bin/python ]; then
-		if [[ "$( $pdir/usr/bin/python3 -V 2>&1 )" == "Python $ver" ]]; then
+		if [[ "$( $pdir/usr/bin/python3 -V 2>&1 )" == "Python $version" ]]; then
 			return 0
-		elif [[ "$( $pdir/usr/bin/python -V 2>&1 )" == "Python $ver" ]]; then
+		elif [[ "$( $pdir/usr/bin/python -V 2>&1 )" == "Python $version" ]]; then
 			return 0
 		fi
 	fi
@@ -35,7 +35,7 @@ function is_python_installed() {
 }
 
 function build_python() {
-	client_result "Installing Python $ver"
+	client_result "Installing Python $version"
 
 	# Get the number of processors
 	if [ -f /proc/cpuinfo ]; then
@@ -44,16 +44,16 @@ function build_python() {
 		cpus=1
 	fi
 	
-	curl -L -o $tdir/$ver.tgz https://www.python.org/ftp/python/$ver/Python-$ver.tgz
-	mkdir -p $tdir/python-$ver
-	tar xvzf $tdir/$ver.tgz --strip-component=1 -C $tdir/python-$ver
+	curl -L -o $tdir/$version.tgz https://www.python.org/ftp/python/$version/Python-$version.tgz
+	mkdir -p $tdir/python-$version
+	tar xvzf $tdir/$version.tgz --strip-component=1 -C $tdir/python-$version
 	
 	# if a different version exists, remove it first
 	if [ -d $pdir/usr/bin ]; then
 		rm -rf $pdir/usr
 	fi
 
-	cd $tdir/python-$ver
+	cd $tdir/python-$version
 	./configure --prefix=${pdir}usr/
 	make -j$cpus > /dev/null
 	make install -j$cpus > /dev/null
@@ -83,7 +83,7 @@ if ! is_python_installed; then
 	build_python
 #	create_virt
 else
-	client_result "Python $ver already installed."
+	client_result "Python $version already installed."
 fi
 
 #if ! is_virt_installed; then
@@ -93,8 +93,8 @@ fi
 #fi
 
 # Clean up temp directory
-rm -rf $tdir/python-$ver
-rm -f $tdir/$ver.tgz
+rm -rf $tdir/python-$version
+rm -f $tdir/$version.tgz
 
 # pip stores cache in .cache an logs in .pip.
 # Create directories, change ownership and SELinux security context
@@ -113,4 +113,4 @@ mkdir -p ${OPENSHIFT_PYTHON_DIR}etc
 #update-configuration
 
 # Call the version specific setup script
-exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/setup $version
+exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/setup $versionsion
