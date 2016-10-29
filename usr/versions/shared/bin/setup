@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+
+version="$1"
+
+# Copy the version specific files to python directory
+shopt -s dotglob
+cp -rf $OPENSHIFT_PYTHON_DIR/usr/versions/$version/etc/* $OPENSHIFT_PYTHON_DIR/etc
+[ -d $OPENSHIFT_PYTHON_DIR/usr/versions/$version/metadata ] && cp -rf $OPENSHIFT_PYTHON_DIR/usr/versions/$version/metadata/* $OPENSHIFT_PYTHON_DIR/metadata
+
+# Create/truncate gear-editable Apache configuration files
+echo > $OPENSHIFT_PYTHON_DIR/etc/conf.d/openshift.conf
+echo > $OPENSHIFT_PYTHON_DIR/etc/conf.d/passenv.conf
+echo > $OPENSHIFT_PYTHON_DIR/etc/conf.d/server-status.conf
+
+cp -f $OPENSHIFT_PYTHON_DIR/usr/versions/$version/etc/conf.d/performance.conf.erb $OPENSHIFT_PYTHON_DIR/conf/performance.conf.erb
+cp -f $OPENSHIFT_PYTHON_DIR/conf/performance.conf.erb $OPENSHIFT_PYTHON_DIR/conf/performance.conf.erb.hidden

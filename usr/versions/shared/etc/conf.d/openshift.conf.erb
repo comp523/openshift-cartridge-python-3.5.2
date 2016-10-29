@@ -1,0 +1,28 @@
+ServerRoot "<%= ENV['OPENSHIFT_PYTHON_DIR'] %>"
+DocumentRoot "<%= ENV['OPENSHIFT_PYTHON_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>"
+Listen <%= ENV['OPENSHIFT_PYTHON_IP'] %>:<%= ENV['OPENSHIFT_PYTHON_PORT'] %>
+User <%= ENV['OPENSHIFT_GEAR_UUID'] %>
+Group <%= ENV['OPENSHIFT_GEAR_UUID'] %>
+<IfVersion >= 2.4>
+DefaultRuntimeDir "<%= "#{ENV['OPENSHIFT_PYTHON_DIR']}/run"%>"
+</IfVersion>
+
+ErrorLog "|tee"
+CustomLog "|tee" combined
+
+<Directory "<%= ENV['OPENSHIFT_PYTHON_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>">
+  AllowOverride all
+  Options -MultiViews
+</Directory>
+
+<% #Backward compatibilty with wsgi/static/ directory
+  if $SAFE!=2 && (File.directory?("#{ENV['OPENSHIFT_REPO_DIR']}wsgi/static") || File.symlink?("#{ENV['OPENSHIFT_REPO_DIR']}wsgi/static"))
+    %><%= "Alias /static #{ENV['OPENSHIFT_REPO_DIR']}wsgi/static" %><%
+  end
+%>
+
+WSGIApplicationGroup %{GLOBAL}
+WSGIScriptAlias / "<%= ENV['OPENSHIFT_PYTHON_WSGI_APPLICATION'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi/application" %>"
+WSGISocketPrefix "/tmp/wsgi"
+WSGIPassAuthorization On
+WSGIProcessGroup <%= ENV['OPENSHIFT_GEAR_UUID'] %>
