@@ -79,3 +79,4 @@ Version-Overrides:
     - python-3.5
     - python
     - python(version) = 3.5
+Source-Url: https://github.com/comp523/openshift-cartridge-python-3.5.2.git
