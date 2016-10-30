@@ -17,7 +17,7 @@ function relative-virtenv {
 
 function create-virtenv {
   if [ ! -d "$venv_dir" ]  ||  ! $(ls "$venv_dir" > /dev/null 2>&1); then
-    pyvenv --system-site-packages --clear $venv_dir
+    python3 -m venv --system-site-packages --clear $venv_dir
   fi
 
   if ! $(ls $venv_dir/bin/pip > /dev/null 2>&1); then
