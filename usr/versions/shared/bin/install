@@ -23,6 +23,7 @@ if [ ! -f ${OPENSHIFT_PYTHON_DIR}virtenv/bin/python ]; then
 _OLD_VIRTUAL_PATH=
 _OLD_VIRTUAL_PYTHONHOME=
 _OLD_VIRTUAL_PS1=
+ZSH_VERSION=
 source ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/lib/create-virtenv
 create-virtenv
 EOF
