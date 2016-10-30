@@ -29,6 +29,5 @@ VIRTUAL_ENV_DISABLE_PROMPT=
 PS1=
 source ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/lib/create-virtenv
 create-virtenv
-EOF
 fi
 
