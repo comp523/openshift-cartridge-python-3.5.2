@@ -13,4 +13,4 @@ mkdir -p ${OPENSHIFT_PYTHON_DIR}template
 #mkdir $OPENSHIFT_HOMEDIR/.cache
 
 # Call the version specific install script
-exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/install $version
+exec ${OPENSHIFT_PYTHON_DIR}usr/versions/shared/bin/install $version
