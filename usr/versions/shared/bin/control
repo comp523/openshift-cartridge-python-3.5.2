@@ -70,10 +70,10 @@ function start_apache() {
     echo "valid httpd process"
     # Force httpd into its own pgroup, as httpd is hard-coded to TERM everything in
     # its pgroup during shutdown (even while foregrounded)
+    echo "lookin at $HTTPD_PID_FILE"
     set -m
     eval "nohup /usr/sbin/httpd $HTTPD_CMD_CONF -DFOREGROUND |& /usr/bin/logshifter -tag python &"
     set +m
-    echo "done?"
     [ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
 }
 
@@ -83,6 +83,7 @@ function start() {
         start_app
     else
         start_apache
+        echo "done with that $?"
     fi
     echo "startid"
 }
