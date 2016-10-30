@@ -78,7 +78,7 @@ function start_apache() {
     sleep 10
     [ -f $HTTPD_PID_FILE ] && echo "yum"
     echo "WATUP $lolol"
-    #[ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
+    [ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
     derp=$?
     echo "OMG $derp"
     echo "ayy"
