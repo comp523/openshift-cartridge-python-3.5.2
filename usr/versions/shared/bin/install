@@ -5,7 +5,7 @@ if [[ -d /usr/lib64 ]]; then
 else
   _libdir=/usr/lib
 fi
-
+echo "Installing..."
 version="$1"
 
 # Copy the version specific files to python directory
