@@ -78,11 +78,13 @@ function start_apache() {
 }
 
 function start() {
+    echo "startin"
     if [ -f "${OPENSHIFT_REPO_DIR}app.py" ]; then
         start_app
     else
         start_apache
     fi
+    echo "startid"
 }
 
 function stop_app() {
