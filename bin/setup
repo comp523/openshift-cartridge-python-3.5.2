@@ -114,4 +114,4 @@ mkdir -p ${OPENSHIFT_PYTHON_DIR}etc
 #update-configuration
 
 # Call the version specific setup script
-exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/setup $version
+exec ${OPENSHIFT_PYTHON_DIR}usr/versions/shared/bin/setup $version
