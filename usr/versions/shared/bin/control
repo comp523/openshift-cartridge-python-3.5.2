@@ -59,7 +59,7 @@ function pre_start_apache_config {
     select_python_document_root ${OPENSHIFT_REPO_DIR}
     select_python_wsgi_application ${OPENSHIFT_REPO_DIR}
     oo-erb ${ERB_HTTPD_CFG_DIR}openshift.conf.erb > ${HTTPD_CFG_DIR}openshift.conf
-    oo-erb ${OPENSHIFT_PYTHON_DIR}conf/performance.conf.erb.hidden > ${HTTPD_CFG_DIR}performance.conf
+    #oo-erb ${OPENSHIFT_PYTHON_DIR}conf/performance.conf.erb.hidden > ${HTTPD_CFG_DIR}performance.conf
 }
 
 function start_apache() {
