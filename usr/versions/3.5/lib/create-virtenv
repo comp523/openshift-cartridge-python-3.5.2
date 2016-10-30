@@ -34,7 +34,7 @@ function install_pip() {
   source bin/activate
 
   # Install pip
-  $OPENSHIFT_PYTHON_DIRusr/bin/python3 ${OPENSHIFT_PYTHON_DIR}/usr/versions/3.5/lib/get-pip.py
+  $OPENSHIFT_PYTHON_DIR/usr/bin/python3 ${OPENSHIFT_PYTHON_DIR}/usr/versions/3.5/lib/get-pip.py
 
   popd > /dev/null
 }
