@@ -5,10 +5,8 @@ if [[ -d /usr/lib64 ]]; then
 else
   _libdir=/usr/lib
 fi
-echo "Installing"
 version="$1"
 
-echo "Installing."
 # Copy the version specific files to python directory
 shopt -s dotglob
 [ -d ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/template ] \
