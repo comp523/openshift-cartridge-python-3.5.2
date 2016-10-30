@@ -65,25 +65,14 @@ function pre_start_apache_config {
 function start_apache() {
     echo "Starting Python ${OPENSHIFT_PYTHON_VERSION} cartridge (Apache+mod_wsgi)"
     pre_start_apache_config
-    echo "prestarted"
     ensure_valid_httpd_process "$HTTPD_PID_FILE" "$HTTPD_CFG_FILE"
-    echo "valid httpd process"
     # Force httpd into its own pgroup, as httpd is hard-coded to TERM everything in
     # its pgroup during shutdown (even while foregrounded)
-    echo "lookin at $HTTPD_PID_FILE also $HTTPD_CMD_CONF"
     set -m
     eval "nohup /usr/sbin/httpd $HTTPD_CMD_CONF -DFOREGROUND |& /usr/bin/logshifter -tag python &"
     lolol=$?
     set +m
-    sleep 10
-    [ -f $HTTPD_PID_FILE ] && echo "yum"
-    echo "WATUP $lolol"
-    [ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
-    derp=$?
-    echo "OMG $derp"
-    echo "ayy"
-    echo [ -f $HTTPD_PID_FILE ]
-    return $derp
+    #[ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
 }
 
 function start() {
