@@ -75,6 +75,8 @@ function start_apache() {
     eval "nohup /usr/sbin/httpd $HTTPD_CMD_CONF -DFOREGROUND |& /usr/bin/logshifter -tag python &"
     lolol=$?
     set +m
+    sleep 10
+    echo [ -f $HTTPD_PID_FILE ]
     echo "WATUP $lolol"
     [ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
     $derp = $?
