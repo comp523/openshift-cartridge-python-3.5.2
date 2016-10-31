@@ -70,9 +70,8 @@ function start_apache() {
     # its pgroup during shutdown (even while foregrounded)
     set -m
     eval "nohup /usr/sbin/httpd $HTTPD_CMD_CONF -DFOREGROUND |& /usr/bin/logshifter -tag python &"
-    lolol=$?
     set +m
-    #[ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
+    [ "$?" == "0" ] && wait_for_pid_file $HTTPD_PID_FILE
 }
 
 function start() {
